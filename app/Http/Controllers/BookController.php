@@ -35,10 +35,7 @@ class BookController extends Controller
         // $books = $books->get();
 
         $cacheKey = 'books:' . $filter . ':' . $title;
-        $books = cache()->remember($cacheKey, 3600, function () use ($books) {
-            dd('Not from cache!');
-            return $books->get();
-        });
+        $books = cache()->remember($cacheKey, 3600, fn() => $books->get());
 
         // The bellow commented code is the same as the line below it.
         // return view('books.index', compact('books'));
