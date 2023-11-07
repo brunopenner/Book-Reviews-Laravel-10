@@ -32,9 +32,15 @@ class BookController extends Controller
             default => $books->latest()
         };
 
-        $books = $books->get();
+        // $books = $books->get();
 
-        // The bellow commented code is the same as the live below it.
+        $cacheKey = 'books:' . $filter . ':' . $title;
+        $books = cache()->remember($cacheKey, 3600, function () use ($books) {
+            dd('Not from cache!');
+            return $books->get();
+        });
+
+        // The bellow commented code is the same as the line below it.
         // return view('books.index', compact('books'));
         return view('books.index', ['books' => $books]);
 
